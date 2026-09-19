@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="assets/fav_icon.png" rel="icon" type="image/png">
+  <title>ahmednabiled</title>
+  <!-- Tailwind CSS CDN with forms and container-queries plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace']
+          },
+          colors: {
+            brand: {
+              black: '#09090b',
+              surface: '#111113',
+              card: '#18181b',
+              border: '#27272a',
+              muted: '#71717a',
+              highlight: '#f4f4f5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet">
+  <style data-purpose="base-layout">
+    body {
+      background-color: #09090b;
+      color: #e4e4e7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    ::selection {
+      background: #27272a;
+      color: #f4f4f5;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-brand-black text-zinc-300 antialiased pb-8">
+  <!-- BEGIN: NavigationBar -->
+  <header class="sticky top-0 z-40 w-full bg-[#09090b]/80 backdrop-blur-md">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Monogram Logo and Brand Title -->
+      <a class="flex items-center gap-3 group" data-purpose="brand-logo-link" href="#"><img alt="Ahmed Nabil Logo"
+          class="w-8 h-8 rounded-lg border border-zinc-800 object-cover group-hover:border-zinc-500 transition-all duration-300"
+          src="assets/logo.png">
+        <div class="flex flex-col"><span
+            class="text-sm font-semibold text-zinc-100 group-hover:text-white tracking-tight">Ahmed
+            Nabil&nbsp;</span><span class="text-[11px] font-mono text-zinc-500">AI Engineer • Motion Designer</span>
+        </div>
+      </a>
+      <!-- Quick Status & Action -->
+      <div class="flex items-center gap-4 text-xs font-mono">
+
+        <a class="inline-flex items-center text-zinc-400 hover:text-white transition-colors border border-zinc-800 hover:border-zinc-700 rounded-md px-3 py-1.5 bg-zinc-900/60"
+          href="https://ngl.link/ahmednabiled" target="_blank" rel="noopener noreferrer">Ask me</a>
+      </div>
+    </div>
+  </header>
+  <!-- END: NavigationBar -->
+  <!-- BEGIN: AmbientCinematicHeroVideo -->
+  <section class="relative w-full overflow-hidden bg-brand-black" data-purpose="ambient-cinematic-video">
+    <div class="relative w-full h-[340px] sm:h-[420px] md:h-[500px] overflow-hidden bg-black">
+      <video id="heroVideo" class="w-full h-full object-cover object-center select-none cursor-pointer"
+        src="assets/my_new_intro.mp4" autoplay muted playsinline></video>
+      <!-- Deep edge vignettes pushing INTO the video -->
+      <div class="absolute inset-0 pointer-events-none"
+        style="background: radial-gradient(ellipse 90% 75% at 50% 50%, transparent 35%, rgba(9, 9, 11, 0.5) 70%, #09090b 100%);">
+      </div>
+      <!-- Top gradient encroaching downward -->
+      <div
+        class="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#09090b] via-[#09090b]/60 to-transparent pointer-events-none">
+      </div>
+      <!-- Bottom gradient completely melting into page body -->
+      <div
+        class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#09090b] via-[#09090b]/80 to-transparent pointer-events-none">
+      </div>
+      <!-- Left & right side encroachment -->
+      <div
+        class="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-[#09090b] via-[#09090b]/60 to-transparent pointer-events-none">
+      </div>
+      <div
+        class="absolute inset-y-0 right-0 w-24 sm:w-36 bg-gradient-to-l from-[#09090b] via-[#09090b]/60 to-transparent pointer-events-none">
+      </div>
+    </div>
+  </section>
+  <!-- END: AmbientCinematicHeroVideo -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6">
+    <!-- BEGIN: ProfileAndBioIntroSection -->
+    <section class="space-y-6" data-purpose="profile-header">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 py-5 sm:py-7">
+        <div class="flex items-start gap-4">
+          <div class="relative"><img alt="Ahmed Nabil Avatar"
+              class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-zinc-800 shadow-xl bg-black object-cover"
+              src="assets/personal_pic.png"></div>
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-semibold text-zinc-100 tracking-tight">Ahmed Nabil&nbsp;</h1><span
+                class="text-xs px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-400 font-mono">he/him</span>
+            </div>
+            <p class="text-sm text-zinc-400">AI Engineering Intern @ <span
+                class="text-zinc-200 font-medium">KanzMS</span><br>B.Sc. Computer Engineering</p>
+            <p class="text-xs text-zinc-500 font-mono pt-0.5">Cairo, Egypt • UTC+3</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pt-2 sm:pt-1"><a
+            class="text-xs font-mono text-zinc-400 hover:text-white px-3 py-1.5 rounded border border-zinc-800 hover:border-zinc-700 bg-zinc-900/50 transition"
+            href="mailto:ahmadnabiled@gmail.com">ahmadnabiled@gmail.com</a><a
+            class="text-xs font-mono text-zinc-200 hover:text-white px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 transition"
+            href="assets/Resume_ahmednabiled.pdf" target="_blank" rel="noopener noreferrer">Resume / CV</a></div>
+      </div>
+      <div class="relative w-full h-36 sm:h-48 rounded-xl overflow-hidden border border-zinc-800/80 shadow-md"><img
+          alt="Pixel Art Studio Banner"
+          class="w-full h-full object-cover object-center filter brightness-95 contrast-105" src="assets/banner.jpg">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-transparent opacity-80"></div>
+      </div>
+      <article class="text-sm leading-relaxed text-zinc-400 space-y-4 pt-2 pb-8">
+        <p>I am an <span class="text-zinc-200 font-medium">AI Engineering Intern at KanzMS</span> working on
+          SDD programming, internal AI agent development, automated design tooling, and LLM proxy observability.
+          Studying Computer and Control Systems Engineering.</p>
+        <p>Highly skilled <span class="text-zinc-200 font-medium">Motion Designer</span> with 4+ years of professional experience.</p>
+        <p>Founder of <span class="text-zinc-200 font-medium">NIQRA</span> (manufacturing workspace
+          accessories)</p>
+        <p class="pt-1 text-xs font-mono text-zinc-500">Find my code on <a class="text-zinc-300 hover:underline"
+            href="https://github.com/ahmednabiled" target="_blank" rel="noopener noreferrer">GitHub</a>. Connect with me on <a
+            class="text-zinc-300 hover:underline" href="https://linkedin.com/in/ahmednabiled"
+            target="_blank" rel="noopener noreferrer">LinkedIn</a>, or watch my <a class="text-zinc-300 hover:underline" href="#projects">YouTube
+            Tutorials</a>.</p>
+      </article>
+    </section>
+    <!-- END: ProfileAndBioIntroSection -->
+    <!-- BEGIN: WorkTimelineSection -->
+    <section class="py-6" data-purpose="work-history">
+      <div class="mb-5">
+        <h3 class="text-xs font-mono uppercase tracking-wider text-zinc-500">Work Experience</h3>
+      </div>
+      <div class="space-y-4">
+        <div
+          class="group flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 p-2.5 -mx-2.5 rounded-lg transition hover:bg-zinc-900/40">
+          <div class="flex items-center gap-3"><span
+              class="inline-flex items-center justify-center w-28 shrink-0 rounded-md border border-zinc-800/70 bg-zinc-900/50 px-2 py-1 text-[11px] font-mono tracking-tight text-zinc-400 tabular-nums">2026
+              – Present</span>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-teal-400"></span><span
+                class="text-sm font-medium text-zinc-200">KanzMS</span><span
+                class="text-xs text-zinc-500 font-mono hidden sm:inline-block">• AI Engineering Intern</span></div>
+          </div>
+          <p class="text-xs sm:text-sm text-zinc-400 sm:text-right pl-12 sm:pl-0">SDD programming, internal AI agent dev
+            &amp; LLM proxy observability</p>
+        </div>
+        <div
+          class="group flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 p-2.5 -mx-2.5 rounded-lg transition hover:bg-zinc-900/40">
+          <div class="flex items-center gap-3"><span
+              class="inline-flex items-center justify-center w-28 shrink-0 rounded-md border border-zinc-800/70 bg-zinc-900/50 px-2 py-1 text-[11px] font-mono tracking-tight text-zinc-400 tabular-nums">Feb
+              – Apr 2026</span>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span
+                class="text-sm font-medium text-zinc-200">Mesa (GSOC Prep)</span><span
+                class="text-xs text-zinc-500 font-mono hidden sm:inline-block">• Contributor</span></div>
+          </div>
+          <p class="text-xs sm:text-sm text-zinc-400 sm:text-right pl-12 sm:pl-0">Agent-based modeling, local LLMs
+            exploration, test suites</p>
+        </div>
+        <div
+          class="group flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 p-2.5 -mx-2.5 rounded-lg transition hover:bg-zinc-900/40">
+          <div class="flex items-center gap-3"><span
+              class="inline-flex items-center justify-center w-28 shrink-0 rounded-md border border-zinc-800/70 bg-zinc-900/50 px-2 py-1 text-[11px] font-mono tracking-tight text-zinc-400 tabular-nums">2024
+              – Present</span>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span
+                class="text-sm font-medium text-zinc-200">CAT Reloaded</span><span
+                class="text-xs text-zinc-500 font-mono hidden sm:inline-block">• Data Science Lead</span></div>
+          </div>
+          <p class="text-xs sm:text-sm text-zinc-400 sm:text-right pl-12 sm:pl-0">Mentored newcomers, led project tasks
+            &amp; technical workshops</p>
+        </div>
+      </div>
+    </section>
+    <!-- END: WorkTimelineSection -->
+    <!-- BEGIN: PublicationsAndArticles -->
+    <section class="py-6" data-purpose="articles-and-talks">
+      <div class="mb-5 flex items-center justify-between" id="projects">
+        <h3 class="text-xs font-mono uppercase tracking-wider text-zinc-500">Featured Projects &amp; Demos</h3><span
+          class="text-xs font-mono text-zinc-500">Selected work</span>
+      </div>
+      <div class="space-y-3"><a
+          class="group flex items-center justify-between p-2.5 -mx-2.5 rounded-lg hover:bg-zinc-900/50 transition"
+          href="https://www.youtube.com/playlist?list=PLLRyjJxY-7-lwuqlATjEr6eclunseK0QB" target="_blank" rel="noopener noreferrer">
+          <div class="flex items-center gap-3 min-w-0"><span
+              class="text-xs font-mono text-zinc-500 w-16 shrink-0">Playlist</span>
+            <div class="flex items-center gap-2.5 truncate"><span class="text-red-500 shrink-0"><svg
+                  class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z">
+                  </path>
+                </svg></span><span class="text-sm text-zinc-200 group-hover:text-white truncate font-medium">Deep
+                Learning framework from scratch</span></div>
+          </div><span class="text-xs font-mono text-zinc-500 shrink-0 ml-4">YouTube ↗</span>
+        </a></div>
+    </section>
+    <!-- END: PublicationsAndArticles -->
+    <!-- BEGIN: FooterSection -->
+    <footer class="pt-8 pb-12 text-zinc-500 text-xs font-mono space-y-4" data-purpose="site-footer">
+      <p class="text-zinc-400">Open to AI engineering roles and research opportunities in Egypt or remote.</p>
+      <p>Reach me at <a class="text-zinc-200 underline hover:text-white"
+          href="mailto:ahmadnabiled@gmail.com">ahmadnabiled@gmail.com</a> or view my <a
+          class="text-zinc-200 underline hover:text-white" href="https://github.com/ahmednabiled"
+          target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+      <div class="pt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-zinc-600"><a
+          class="hover:text-zinc-400 transition" href="https://github.com/ahmednabiled"
+          target="_blank" rel="noopener noreferrer">github.com/ahmednabiled</a><span>•</span><a class="hover:text-zinc-400 transition"
+          href="https://linkedin.com/in/ahmednabiled" target="_blank" rel="noopener noreferrer">linkedin.com/in/ahmednabiled</a><span>•</span><span>©
+          2026 Ahmed Nabil Awadallah</span></div>
+    </footer>
+    <!-- END: FooterSection -->
+  </main>
+  <script data-purpose="interaction-handlers">
+    document.addEventListener('DOMContentLoaded', () => {
+      const heroVideo = document.getElementById('heroVideo');
+      if (heroVideo) {
+        heroVideo.addEventListener('click', () => {
+          heroVideo.currentTime = 0;
+          heroVideo.play();
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>
