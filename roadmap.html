@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="assets/fav_icon.png" rel="icon" type="image/png">
+  <title>LLM Engineering Roadmap — Ahmed Nabil</title>
+  <meta name="description"
+    content="Ahmed Nabil's hands-on roadmap to building a language model from scratch: tokenizer, attention, transformer, training, inference, alignment and a full capstone.">
+  <meta name="theme-color" content="#09090b">
+  <link rel="canonical" href="https://ahmednabiled.com/roadmap.html">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #09090b;
+      --board: #1E1E1E;
+      --card: #131316;
+      --border: #27272a;
+      --muted: #71717a;
+      --text: #e4e4e7;
+      --green: #22c55e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 72px;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: #27272a; color: #f4f4f5; }
+
+    header {
+      position: sticky; top: 0; z-index: 40; width: 100%;
+      background: rgba(9, 9, 11, .8);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+
+    .brand img {
+      width: 32px; height: 32px; border-radius: 8px; border: 1px solid #27272a; object-fit: cover;
+      transition: border-color .3s;
+    }
+
+    .brand:hover img { border-color: #71717a; }
+
+    .brand .name { font-size: 14px; font-weight: 600; color: #f4f4f5; letter-spacing: -.01em; }
+    .brand .role { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #a1a1aa; text-decoration: none;
+      border: 1px solid #27272a; border-radius: 6px;
+      padding: 6px 12px; background: rgba(24, 24, 27, .6);
+      transition: color .2s, border-color .2s;
+    }
+
+    .nav-link:hover { color: #fff; border-color: #3f3f46; }
+
+    main { max-width: 1200px; margin: 0 auto; padding: 28px 20px 0; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--card);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+      padding: 22px;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-transform: uppercase;
+      letter-spacing: .14em; color: #f4f4f5; margin: 0 0 10px;
+    }
+
+    h1 { font-size: 1.6rem; line-height: 1.15; font-weight: 650; letter-spacing: -.02em; margin: 0 0 16px; color: #fafafa; }
+
+    .progress-track {
+      height: 8px; border-radius: 999px; background: #18181b;
+      border: 1px solid #27272a; overflow: hidden; margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%; width: 0%; border-radius: 999px;
+      background: var(--green);
+      transition: width .5s cubic-bezier(.34, 1.3, .64, 1);
+    }
+
+    .progress-label { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #a1a1aa; margin-bottom: 18px; }
+    .progress-label b { color: #f4f4f5; }
+
+    .lede { color: #a1a1aa; font-size: 13.5px; line-height: 1.7; margin: 0 0 20px; }
+
+    .meta-row {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      padding-top: 16px; border-top: 1px solid #1f1f23;
+      font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #a1a1aa;
+    }
+
+    .meta-row span { display: inline-flex; align-items: center; gap: 7px; }
+    .meta-row svg { width: 14px; height: 14px; }
+
+    .legend { display: flex; gap: 16px; margin-top: 14px; font-size: 10.5px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+    .swatch.done { background: var(--green); }
+    .swatch.locked { background: #757575; }
+
+    .updated { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #52525b; }
+
+    /* Right board */
+    .board-wrap { position: relative; min-width: 0; }
+
+    .canvas {
+      position: relative;
+      width: 100%;
+      height: clamp(460px, 78vh, 820px);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--board);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+      cursor: grab;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: contain;
+    }
+
+    .canvas.grabbing { cursor: grabbing; }
+
+    #board { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; display: block; }
+
+    .canvas-hint {
+      position: absolute; top: 12px; right: 12px; z-index: 5;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      color: #a1a1aa; background: rgba(9, 9, 11, .7);
+      border: 1px solid #27272a; border-radius: 999px; padding: 5px 11px;
+      pointer-events: none; transition: opacity .4s ease;
+    }
+
+    .canvas-hint.hide { opacity: 0; }
+
+    /* Hover / tap popup */
+    .tip {
+      position: absolute; z-index: 8; width: max-content; max-width: 300px;
+      background: #111114; border: 1px solid #2f2f35; border-radius: 12px;
+      padding: 12px 14px; box-shadow: 0 18px 44px rgba(0, 0, 0, .6);
+      opacity: 0; transform: translateY(4px); pointer-events: none;
+      transition: opacity .16s ease, transform .16s ease;
+    }
+
+    .tip.show { opacity: 1; transform: none; pointer-events: auto; }
+
+    .tip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .tip-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; color: var(--green); }
+    .tip-phase { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
+    .tip-title { font-size: 13.5px; font-weight: 600; color: #fafafa; margin: 0 0 8px; letter-spacing: -.01em; }
+    .tip-status { font-size: 11.5px; line-height: 1.5; margin: 0; }
+    .tip-status.done { color: var(--green); }
+    .tip-status.todo { color: #a1a1aa; }
+    .tip-status.progress { color: #e4e4e7; }
+
+    .tip-src { list-style: none; padding: 0; margin: 9px 0 0; display: flex; flex-direction: column; gap: 6px; }
+    .tip-src a {
+      display: block; font-size: 12px; line-height: 1.4; color: #d4d4d8; text-decoration: none;
+      border-left: 2px solid #2f2f35; padding-left: 9px; transition: color .2s, border-color .2s;
+    }
+    .tip-src a:hover { color: #fff; border-color: var(--green); }
+
+    .badge { cursor: default; outline: none; }
+    .badge .jet { transition: filter .25s ease; }
+    .badge:hover .jet, .badge:focus-visible .jet { filter: brightness(1.45) saturate(1.2); }
+    .badge:hover, .badge:focus-visible { filter: drop-shadow(0 0 14px rgba(255, 255, 255, .35)); }
+    .badge[data-state="done"]:hover, .badge[data-state="done"]:focus-visible { filter: drop-shadow(0 0 16px rgba(34, 197, 94, .55)); }
+
+    .badge[data-state="locked"] .upper { transition: transform .18s cubic-bezier(.34, 1.4, .64, 1); will-change: transform; }
+    .badge[data-state="locked"]:hover .upper, .badge[data-state="locked"]:focus-visible .upper { transform: translateY(4px); }
+
+    .node-title { font-family: 'Inter', sans-serif; }
+    .node-meta { font-family: 'JetBrains Mono', monospace; }
+
+    @keyframes markerBob {
+      from { transform: translateY(-3px); }
+      to   { transform: translateY(3px); }
+    }
+    .marker { animation: markerBob 1.4s ease-in-out infinite alternate; }
+    .marker polygon { filter: drop-shadow(0 0 5px rgba(255, 255, 255, .35)); }
+    @media (prefers-reduced-motion: reduce) { .marker { animation: none; } }
+
+    .toolbar { position: fixed; right: 18px; bottom: 18px; z-index: 20; display: flex; gap: 8px; }
+
+    .toolbar button {
+      background: #18181b; color: #d4d4d8; border: 1px solid #3a3a3a;
+      border-radius: 8px; padding: 8px 12px; font: inherit;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+
+    .toolbar button:hover { border-color: #a1a1aa; color: #fff; }
+
+    footer {
+      max-width: 1200px; margin: 36px auto 0; padding: 0 20px;
+      color: #52525b; font-size: 12px; font-family: 'JetBrains Mono', monospace; line-height: 1.7;
+    }
+
+    footer a { color: #a1a1aa; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; gap: 18px; }
+      .panel { padding: 20px; }
+      .canvas { height: clamp(420px, 64vh, 640px); }
+      .brand .role { display: none; }
+      h1 { font-size: 1.45rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="nav">
+      <a class="brand" href="index.html">
+        <img alt="Ahmed Nabil Logo" src="assets/logo.png">
+        <div>
+          <div class="name">Ahmed Nabil&nbsp;</div>
+          <div class="role">AI Engineer &bull; Motion Designer</div>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="https://ngl.link/ahmednabiled" target="_blank" rel="noopener noreferrer">Ask me</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="layout">
+      <aside class="panel">
+        <p class="eyebrow">LLM Engineering &middot; Level 1</p>
+        <h1>Building a language model from scratch</h1>
+        <div class="progress-track" role="progressbar" aria-label="Roadmap progress" aria-valuemin="0" aria-valuemax="32">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-label"><b id="doneCount">0</b> / <span id="totalCount">32</span> steps complete</div>
+        <p class="lede">
+          A 32-step path from raw text to a full model system &mdash; tokenizer, embeddings, attention,
+          transformer, training, inference, alignment, serving and a capstone.
+        </p>
+        <div class="meta-row">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+              <path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>
+            </svg>
+            <span id="stepsMeta">32 lessons</span>
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <path d="M4 6h16M4 12h16M4 18h10"/>
+            </svg>
+            13 phases
+          </span>
+        </div>
+        <div class="legend">
+          <span><i class="swatch done"></i> Completed</span>
+          <span><i class="swatch locked"></i> Not started</span>
+        </div>
+        <p class="updated" id="updated"></p>
+      </aside>
+
+      <section class="board-wrap">
+        <div class="canvas" id="canvas">
+          <div class="canvas-hint" id="hint">Drag to explore &middot; hover a stage</div>
+          <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
+          <svg id="board" xmlns="http://www.w3.org/2000/svg" role="img"
+            aria-label="Isometric LLM engineering roadmap"></svg>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toolbar">
+    <button id="zoomOut" type="button" aria-label="Zoom out">&minus;</button>
+    <button id="center" type="button">Start</button>
+    <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
+  </div>
+
+  <footer>
+    <p>Part of <a href="index.html">ahmednabiled.com</a> &mdash; an ongoing log of hands-on LLM work.</p>
+    <p>Roadmap design inspired by <a href="https://x.com/TheAhmadOsman/status/2091264061665415305"
+        target="_blank" rel="noopener noreferrer">Ahmad Osman (@TheAhmadOsman)</a>. All credit for the original concept goes to him.</p>
+  </footer>
+
+  <script src="roadmap-stages.js"></script>
+  <script src="roadmap-data.js"></script>
+  <script>
+    const PHASES = window.ROADMAP_STAGES || [];
+    const DATA = window.ROADMAP_DATA || {};
+    const STAGES = DATA.stages || {};
+
+    const nodes = [];
+    PHASES.forEach((phase) => {
+      phase.topics.forEach(([title, blurb]) => nodes.push({ title, blurb, phase: phase.name }));
+    });
+    nodes.forEach((n, i) => {
+      n.id = String(i + 1);
+      n.num = String(i + 1).padStart(2, "0");
+      const st = STAGES[n.id] || {};
+      n.done = st.done === true;
+      n.note = typeof st.note === "string" ? st.note : "";
+      n.sources = Array.isArray(st.sources) ? st.sources : [];
+    });
+
+    /* Isometric badge geometry, mirrored from the reference board */
+    const REL = {
+      done: {
+        dark: [[0, 34.17], [-47, 7.04], [-47, -7.10], [0, -34.23], [47, -7.10], [47, 7.04]],
+        mid: [[0, 19.95], [-47, -7.19], [-47, -7.46], [0, -34.60], [47, -7.46], [47, -7.19]],
+        cap: [[-0.5, 9.40], [-30, -7.51], [-30, -7.68], [-0.5, -24.60], [29, -7.68], [29, -7.51]]
+      },
+      locked: {
+        base: [[0, 34.2], [-47, 7.07], [-47, -7.07], [0, -34.2], [47, -7.07], [47, 7.07]],
+        capDark: [[0, 12.43], [-33, -6.74], [-33, -20.39], [0, -39.57], [33, -20.39], [33, -6.74]],
+        capLight: [[0, -1.57], [-33, -20.48], [-33, -20.66], [0, -39.57], [33, -20.66], [33, -20.48]],
+        baseLight: [[0, 20.07], [-47, -7.07], [-33, -15.57], [-33, -7.57], [0, 11.49], [33, -7.57], [33, -15.15], [47, -7.07]]
+      }
+    };
+
+    /* Exact path line from the reference board (native 749 x 3228 space) */
+    const RIBBON = [
+      [263.71, 30.71], [208.44, 0.28], [99.79, 66.03], [222.21, 145.37], [49.20, 253.92],
+      [233.96, 363.55], [364.96, 290.81], [534.64, 391.58], [239.95, 570.38], [450.74, 700.75],
+      [229.30, 837.26], [371.24, 927.87], [148.18, 1065.32], [307.46, 1160.26], [462.96, 1073.37],
+      [606.09, 1158.79], [262.46, 1360.02], [145.45, 1295.36], [0.14, 1382.24], [352.68, 1594.44],
+      [99.65, 1749.19], [307.47, 1872.13], [546.96, 1736.74], [681.62, 1817.27], [148.10, 2133.96],
+      [342.47, 2249.14], [546.97, 2133.96], [739.10, 2247.69], [239.91, 2544.56], [450.73, 2674.94],
+      [209.51, 2822.86], [362.79, 2920.02], [148.17, 3052.60], [442.23, 3226.75], [444.77, 3222.45],
+      [157.83, 3052.50], [372.21, 2920.08], [218.96, 2822.94], [460.27, 2674.96], [249.55, 2544.64],
+      [748.90, 2247.69], [547.03, 2128.18], [342.53, 2243.36], [157.90, 2133.95], [691.38, 1817.29],
+      [547.04, 1730.96], [307.53, 1866.35], [109.35, 1749.11], [362.32, 1594.40], [9.86, 1382.25],
+      [145.55, 1301.12], [262.54, 1365.78], [615.91, 1158.83], [463.04, 1067.59], [307.54, 1154.48],
+      [157.82, 1065.24], [380.65, 927.94], [238.70, 837.33], [460.26, 700.75], [249.52, 570.42],
+      [544.36, 391.54], [365.04, 285.04], [234.04, 357.79], [58.80, 253.80], [231.51, 145.44],
+      [109.21, 66.17], [208.56, 6.06], [261.29, 35.09]
+    ];
+
+    const RIB_N = RIBBON.length;
+    const CENTER = [];
+    for (let i = 0; i < RIB_N / 2; i++) {
+      CENTER.push([
+        (RIBBON[i][0] + RIBBON[RIB_N - 1 - i][0]) / 2,
+        (RIBBON[i][1] + RIBBON[RIB_N - 1 - i][1]) / 2
+      ]);
+    }
+    const CUM = [0];
+    for (let i = 0; i < CENTER.length - 1; i++) {
+      CUM.push(CUM[i] + Math.hypot(CENTER[i + 1][0] - CENTER[i][0], CENTER[i + 1][1] - CENTER[i][1]));
+    }
+    const PATH_LEN = CUM[CUM.length - 1];
+
+    function samplePath(t) {
+      const target = Math.max(0, Math.min(1, t)) * PATH_LEN;
+      for (let i = 0; i < CUM.length - 1; i++) {
+        if (target <= CUM[i + 1] || i === CUM.length - 2) {
+          const seg = CUM[i + 1] - CUM[i];
+          const f = seg > 0 ? (target - CUM[i]) / seg : 0;
+          return {
+            x: CENTER[i][0] + f * (CENTER[i + 1][0] - CENTER[i][0]),
+            y: CENTER[i][1] + f * (CENTER[i + 1][1] - CENTER[i][1])
+          };
+        }
+      }
+    }
+
+    const MARGIN_X = 180;
+    const MARGIN_TOP = 40;
+    const MARGIN_BOTTOM = 120;
+    const BOARD_W = 749 + MARGIN_X * 2;
+    const BOARD_H = 3228 + MARGIN_TOP + MARGIN_BOTTOM;
+
+    const ribbonPoints = RIBBON
+      .map(([x, y]) => (x + MARGIN_X).toFixed(2) + "," + (y + MARGIN_TOP).toFixed(2))
+      .join(" ");
+
+    const positions = nodes.map((n, i) => {
+      const t = nodes.length > 1 ? i / (nodes.length - 1) : 0;
+      const p = samplePath(t);
+      return { x: p.x + MARGIN_X, y: p.y + MARGIN_TOP };
+    });
+
+    function poly(points, cx, cy) {
+      return points.map(([x, y]) => (cx + x).toFixed(2) + "," + (cy + y).toFixed(2)).join(" ");
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function wrap(title, max) {
+      if (title.length <= max) return [title];
+      const words = title.split(" ");
+      const target = Math.ceil(title.length / 2) + 2;
+      let a = "";
+      let b = "";
+      for (const w of words) {
+        if (b === "" && (a ? a + " " + w : w).length <= target) a = a ? a + " " + w : w;
+        else b = b ? b + " " + w : w;
+      }
+      if (!a) { a = title; b = ""; }
+      return b ? [a, b] : [a];
+    }
+
+    function doneBadge(cx, cy) {
+      return '<g class="jet">'
+        + '<polygon points="' + poly(REL.done.dark, cx, cy) + '" fill="#14532d"/>'
+        + '<polygon points="' + poly(REL.done.mid, cx, cy) + '" fill="#16a34a"/>'
+        + '<polygon points="' + poly(REL.done.cap, cx, cy) + '" fill="#22c55e"/>'
+        + '<polyline points="'
+        + (cx - 6) + "," + (cy - 6) + " " + (cx - 1) + "," + (cy - 1) + " " + (cx + 8) + "," + (cy - 11)
+        + '" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+        + '</g>';
+    }
+
+    function lockedBadge(cx, cy) {
+      return '<g class="jet">'
+        + '<polygon class="lower" points="' + poly(REL.locked.base, cx, cy) + '" fill="#2E2E2E"/>'
+        + '<g class="upper">'
+        + '<polygon points="' + poly(REL.locked.capDark, cx, cy) + '" fill="#2E2E2E"/>'
+        + '<polygon points="' + poly(REL.locked.capLight, cx, cy) + '" fill="#757575"/>'
+        + '</g>'
+        + '<polygon class="lower" points="' + poly(REL.locked.baseLight, cx, cy) + '" fill="#757575"/>'
+        + '</g>';
+    }
+
+    function sideLabel(cx, cy, node) {
+      const lines = wrap(node.title, 18);
+      let out = '<text class="node-meta" x="' + cx + '" y="' + (cy + 51) + '" text-anchor="middle" '
+        + 'font-size="9" letter-spacing="0.5" fill="' + (node.done ? "#22c55e" : "#8b8b93") + '">' + node.num + '</text>';
+      lines.forEach((line, i) => {
+        out += '<text class="node-title" x="' + cx + '" y="' + (cy + 65 + i * 13) + '" text-anchor="middle" '
+          + 'font-size="11.5" fill="' + (node.done ? "#d4d4d8" : "#a1a1aa") + '">' + esc(line) + '</text>';
+      });
+      return out;
+    }
+
+    const canvas = document.getElementById("canvas");
+    const board = document.getElementById("board");
+    const hint = document.getElementById("hint");
+    const tip = document.getElementById("tip");
+    const progressFill = document.getElementById("progressFill");
+    const doneCountEl = document.getElementById("doneCount");
+    const stepsMeta = document.getElementById("stepsMeta");
+    const updatedEl = document.getElementById("updated");
+    document.getElementById("totalCount").textContent = String(nodes.length);
+    stepsMeta.textContent = nodes.length + " lessons";
+    if (DATA.updated) updatedEl.textContent = "Last updated " + DATA.updated;
+
+    function currentIndex() {
+      for (let i = 0; i < nodes.length; i++) if (!nodes[i].done) return i;
+      return -1;
+    }
+
+    function render() {
+      const current = currentIndex();
+      let html = "";
+      html += '<polygon points="' + ribbonPoints + '" fill="#ffffff"/>';
+
+      nodes.forEach((node, i) => {
+        const pos = positions[i];
+        const state = node.done ? "done" : "locked";
+        let halo = "";
+        if (i === current) {
+          halo = '<g class="marker">'
+            + '<polygon points="' + (pos.x - 8) + ',' + (pos.y - 78) + ' ' + (pos.x + 8) + ',' + (pos.y - 78) + ' ' + pos.x + ',' + (pos.y - 64) + '" fill="#ffffff"/>'
+            + '</g>';
+        }
+        html += '<g class="badge" data-state="' + state + '" data-index="' + i + '" tabindex="0" '
+          + 'aria-label="' + esc(node.num + " " + node.title) + '">'
+          + halo
+          + (node.done ? doneBadge(pos.x, pos.y) : lockedBadge(pos.x, pos.y))
+          + sideLabel(pos.x, pos.y, node)
+          + '</g>';
+      });
+
+      board.setAttribute("viewBox", "0 0 " + BOARD_W + " " + BOARD_H);
+      board.setAttribute("width", BOARD_W);
+      board.setAttribute("height", BOARD_H);
+      board.innerHTML = html;
+
+      const doneN = nodes.filter((n) => n.done).length;
+      doneCountEl.textContent = String(doneN);
+      progressFill.style.width = (nodes.length ? (doneN / nodes.length) * 100 : 0) + "%";
+      const track = progressFill.parentElement;
+      track.setAttribute("aria-valuenow", String(doneN));
+      track.setAttribute("aria-valuemax", String(nodes.length));
+    }
+
+    /* Hover / tap popup — visitors get information, never controls */
+    let hideTimer = null;
+
+    function tipHTML(i) {
+      const n = nodes[i];
+      let status = "";
+      if (n.done) {
+        status = '<p class="tip-status done">Completed by Ahmed Nabil.</p>';
+      } else if (n.note) {
+        status = '<p class="tip-status progress">In progress &mdash; ' + esc(n.note) + '</p>';
+      } else {
+        status = '<p class="tip-status todo">Ahmed Nabil hasn\'t started this yet.</p>';
+      }
+      let sources = "";
+      if (n.done && n.sources.length) {
+        sources = '<ul class="tip-src">' + n.sources.map((s) => {
+          const label = esc(s.label || s.url || "source");
+          const url = esc(s.url || "#");
+          return '<li><a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a></li>';
+        }).join("") + '</ul>';
+      }
+      return '<div class="tip-head"><span class="tip-num">' + n.num + '</span>'
+        + '<span class="tip-phase">' + esc(n.phase) + '</span></div>'
+        + '<p class="tip-title">' + esc(n.title) + '</p>'
+        + status + sources;
+    }
+
+    function positionTip(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const pad = 12;
+      let x = clientX - rect.left + 16;
+      let y = clientY - rect.top + 16;
+      const tw = tip.offsetWidth;
+      const th = tip.offsetHeight;
+      if (x + tw > rect.width - pad) x = clientX - rect.left - tw - 16;
+      if (x < pad) x = pad;
+      if (y + th > rect.height - pad) y = clientY - rect.top - th - 16;
+      if (y < pad) y = pad;
+      tip.style.left = x + "px";
+      tip.style.top = y + "px";
+    }
+
+    function showTip(i, clientX, clientY) {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      tip.innerHTML = tipHTML(i);
+      tip.classList.add("show");
+      tip.setAttribute("aria-hidden", "false");
+      positionTip(clientX, clientY);
+      hint.classList.add("hide");
+    }
+
+    function scheduleHide() {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(hideTip, 140);
+    }
+
+    function hideTip() {
+      tip.classList.remove("show");
+      tip.setAttribute("aria-hidden", "true");
+    }
+
+    tip.addEventListener("mouseenter", () => {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    });
+    tip.addEventListener("mouseleave", scheduleHide);
+
+    board.addEventListener("mouseover", (e) => {
+      const badge = e.target.closest(".badge");
+      if (badge) showTip(Number(badge.dataset.index), e.clientX, e.clientY);
+    });
+    board.addEventListener("mouseout", (e) => {
+      const badge = e.target.closest(".badge");
+      if (badge && !badge.contains(e.relatedTarget)) scheduleHide();
+    });
+    board.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const badge = e.target.closest(".badge");
+      if (!badge) return;
+      e.preventDefault();
+      const r = badge.getBoundingClientRect();
+      showTip(Number(badge.dataset.index), r.left + r.width / 2, r.top + r.height / 2);
+    });
+
+    /* Canvas pan + zoom (navigation only) */
+    let tx = 0, ty = 0, scale = 1;
+    let autoCenter = true;
+
+    function clamp() {
+      const vw = canvas.clientWidth;
+      const vh = canvas.clientHeight;
+      const w = BOARD_W * scale;
+      const h = BOARD_H * scale;
+      if (w <= vw) tx = (vw - w) / 2;
+      else tx = Math.min(0, Math.max(vw - w, tx));
+      if (h <= vh) ty = (vh - h) / 2;
+      else ty = Math.min(0, Math.max(vh - h, ty));
+    }
+
+    function apply() {
+      board.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + scale + ")";
+    }
+
+    function centerView() {
+      autoCenter = true;
+      scale = 1;
+      const idx = currentIndex();
+      const p = positions[idx < 0 ? positions.length - 1 : idx];
+      tx = canvas.clientWidth / 2 - p.x;
+      ty = canvas.clientHeight / 2 - p.y;
+      clamp();
+      apply();
+    }
+
+    function zoomAt(factor, mx, my) {
+      const next = Math.min(2.5, Math.max(0.35, scale * factor));
+      const k = next / scale;
+      tx = mx - (mx - tx) * k;
+      ty = my - (my - ty) * k;
+      scale = next;
+      clamp();
+      apply();
+    }
+
+    let down = null;
+
+    canvas.addEventListener("pointerdown", (e) => {
+      if (e.target.closest && e.target.closest(".tip")) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      hideTip();
+      down = { x: e.clientX, y: e.clientY, tx, ty, id: e.pointerId, moved: false, target: e.target };
+      canvas.setPointerCapture(e.pointerId);
+      canvas.classList.add("grabbing");
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (!down) return;
+      const dx = e.clientX - down.x;
+      const dy = e.clientY - down.y;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) down.moved = true;
+      tx = down.tx + dx;
+      ty = down.ty + dy;
+      autoCenter = false;
+      clamp();
+      apply();
+    });
+
+    function endPointer(e) {
+      if (!down) return;
+      const moved = down.moved;
+      const target = down.target;
+      canvas.classList.remove("grabbing");
+      try { canvas.releasePointerCapture(down.id); } catch (err) { }
+      down = null;
+      if (!moved) {
+        const badge = target && target.closest ? target.closest(".badge") : null;
+        if (badge) showTip(Number(badge.dataset.index), e.clientX, e.clientY);
+        else hideTip();
+      }
+    }
+
+    canvas.addEventListener("pointerup", endPointer);
+    canvas.addEventListener("pointercancel", () => {
+      if (down) { canvas.classList.remove("grabbing"); down = null; }
+    });
+
+    canvas.addEventListener("wheel", (e) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      zoomAt(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX - rect.left, e.clientY - rect.top);
+      autoCenter = false;
+      hint.classList.add("hide");
+      hideTip();
+    }, { passive: false });
+
+    document.getElementById("zoomIn").addEventListener("click", () => {
+      zoomAt(1.18, canvas.clientWidth / 2, canvas.clientHeight / 2);
+      autoCenter = false;
+      hint.classList.add("hide");
+    });
+    document.getElementById("zoomOut").addEventListener("click", () => {
+      zoomAt(1 / 1.18, canvas.clientWidth / 2, canvas.clientHeight / 2);
+      autoCenter = false;
+      hint.classList.add("hide");
+    });
+    document.getElementById("center").addEventListener("click", () => { centerView(); hint.classList.add("hide"); });
+
+    window.addEventListener("resize", () => { if (autoCenter) centerView(); else { clamp(); apply(); } });
+    window.addEventListener("load", () => { if (autoCenter) centerView(); else { clamp(); apply(); } });
+
+    render();
+    centerView();
+    requestAnimationFrame(() => { if (autoCenter) centerView(); });
+  </script>
+</body>
+
+</html>
