@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Admin &mdash; Roadmap Editor</title>
+  <link href="assets/fav_icon.png" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet">
+  <style>
+    :root { --bg:#09090b; --card:#121215; --border:#27272a; --muted:#71717a; --text:#e4e4e7; --green:#22c55e; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+      padding-bottom: 120px;
+    }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+    header {
+      position: sticky; top: 0; z-index: 20; background: rgba(9,9,11,.85);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    .head-inner { max-width: 900px; margin: 0 auto; padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand b { font-size: 14px; letter-spacing: -.01em; }
+    .brand span { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
+    .brand img { width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border); }
+    a.link { color: #a1a1aa; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    a.link:hover { color: #fff; }
+
+    h1 { font-size: 1.4rem; margin: 28px 0 6px; letter-spacing: -.02em; }
+    .sub { color: #a1a1aa; font-size: 13px; line-height: 1.65; margin: 0 0 20px; max-width: 68ch; }
+    .sub code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e4e4e7; background: #1a1a1e; padding: 1px 5px; border-radius: 4px; }
+
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+    .btn {
+      font: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+      background: #18181b; color: #e4e4e7; border: 1px solid #3a3a3a;
+      border-radius: 9px; padding: 9px 14px; transition: border-color .2s, background .2s;
+    }
+    .btn:hover { border-color: #a1a1aa; }
+    .btn.primary { background: #fff; color: #09090b; border-color: #fff; }
+    .btn.primary:hover { background: #d4d4d8; }
+    .btn.danger:hover { border-color: #ef4444; color: #fca5a5; }
+
+    .phase { margin: 26px 0 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+    .stage {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 10px;
+    }
+    .stage-top { display: flex; align-items: center; gap: 12px; }
+    .stage-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 22px; }
+    .stage-title { flex: 1; font-size: 14px; font-weight: 500; }
+    select, input[type=text], input[type=url], textarea {
+      font: inherit; font-size: 12.5px; color: #e4e4e7; background: #0e0e11;
+      border: 1px solid #2f2f35; border-radius: 8px; padding: 7px 9px; outline: none;
+    }
+    select:focus, input:focus, textarea:focus { border-color: #52525b; }
+    select { cursor: pointer; }
+
+    .note-row { margin-top: 10px; display: none; }
+    .note-row input { width: 100%; }
+    .sources { margin-top: 10px; display: none; }
+    .src-row { display: flex; gap: 8px; margin-bottom: 6px; }
+    .src-row input:first-child { flex: 0 0 34%; }
+    .src-row input:last-of-type { flex: 1; }
+    .src-row button, .add-src {
+      font: inherit; font-size: 12px; cursor: pointer; color: #a1a1aa;
+      background: transparent; border: 1px solid #2f2f35; border-radius: 8px; padding: 6px 9px;
+    }
+    .src-row button:hover, .add-src:hover { color: #fff; border-color: #52525b; }
+    .add-src { margin-top: 2px; }
+
+    .output-head { display: flex; align-items: center; justify-content: space-between; margin: 34px 0 8px; }
+    .output-head h2 { font-size: 14px; margin: 0; }
+    textarea#output {
+      width: 100%; min-height: 220px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      line-height: 1.6; resize: vertical;
+    }
+    .status-msg { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); margin-left: 10px; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="head-inner">
+      <div class="brand">
+        <img alt="logo" src="assets/logo.png">
+        <div>
+          <b>Roadmap Editor</b>
+          <div><span>admin &middot; not linked publicly</span></div>
+        </div>
+      </div>
+      <a class="link" href="roadmap.html">View roadmap &rarr;</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <h1>Update your progress</h1>
+    <p class="sub">
+      Set a status per stage and add the sources you used. When done, click
+      <b>Download roadmap-data.js</b> and drop it into the repo (replacing the old
+      <code>roadmap-data.js</code>). The public roadmap reads that file, so visitors only ever see it
+      read-only. Your edits are kept in this browser as a draft until you download.
+    </p>
+
+    <div class="actions">
+      <button class="btn primary" id="download">Download roadmap-data.js</button>
+      <button class="btn" id="copy">Copy to clipboard</button>
+      <button class="btn" id="clearAll">Clear all statuses</button>
+      <button class="btn danger" id="resetDraft">Reset draft</button>
+      <span class="status-msg" id="msg"></span>
+    </div>
+
+    <div id="list"></div>
+
+    <div class="output-head">
+      <h2>Generated file</h2>
+      <span class="status-msg" id="msg2"></span>
+    </div>
+    <textarea id="output" readonly spellcheck="false"></textarea>
+  </div>
+
+  <script src="roadmap-stages.js"></script>
+  <script src="roadmap-data.js"></script>
+  <script>
+    const PHASES = window.ROADMAP_STAGES || [];
+    const FILE_DATA = window.ROADMAP_DATA || {};
+    const DRAFT_KEY = "llm-roadmap-admin-draft-v1";
+
+    const stages = [];
+    let id = 0;
+    PHASES.forEach((phase) => {
+      phase.topics.forEach(([title]) => {
+        id += 1;
+        stages.push({ id: String(id), num: String(id).padStart(2, "0"), title, phase: phase.name });
+      });
+    });
+
+    /* state: id -> { status: "todo"|"progress"|"done", note, sources:[{label,url}] } */
+    let state = {};
+    function seedFromFile() {
+      state = {};
+      const file = FILE_DATA.stages || {};
+      stages.forEach((s) => {
+        const e = file[s.id] || {};
+        state[s.id] = {
+          status: e.done ? "done" : (e.note ? "progress" : "todo"),
+          note: e.note || "",
+          sources: Array.isArray(e.sources) ? e.sources.map((x) => ({ label: x.label || "", url: x.url || "" })) : []
+        };
+      });
+    }
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.stages) {
+          state = parsed.stages;
+          stages.forEach((s) => { if (!state[s.id]) state[s.id] = { status: "todo", note: "", sources: [] }; });
+          return true;
+        }
+      } catch (e) { }
+      return false;
+    }
+    function saveDraft() {
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ stages: state })); } catch (e) { }
+    }
+
+    seedFromFile();
+    loadDraft();
+
+    const list = document.getElementById("list");
+    const output = document.getElementById("output");
+    const msg = document.getElementById("msg");
+    const msg2 = document.getElementById("msg2");
+
+    function flash(text) {
+      msg.textContent = text;
+      msg2.textContent = text;
+      setTimeout(() => { msg.textContent = ""; msg2.textContent = ""; }, 2200);
+    }
+
+    function render() {
+      let html = "";
+      let lastPhase = "";
+      stages.forEach((s) => {
+        if (s.phase !== lastPhase) {
+          html += '<div class="phase">' + s.phase + '</div>';
+          lastPhase = s.phase;
+        }
+        const st = state[s.id];
+        html += '<div class="stage" data-id="' + s.id + '">'
+          + '<div class="stage-top">'
+          + '<span class="stage-num">' + s.num + '</span>'
+          + '<span class="stage-title">' + s.title + '</span>'
+          + '<select data-act="status">'
+          + '<option value="todo">Not started</option>'
+          + '<option value="progress">In progress</option>'
+          + '<option value="done">Completed</option>'
+          + '</select>'
+          + '</div>'
+          + '<div class="note-row">'
+          + '<input type="text" data-act="note" placeholder="Short note (shown while in progress)" value="' + attr(st.note) + '">'
+          + '</div>'
+          + '<div class="sources">'
+          + st.sources.map((src, i) => srcRow(s.id, i, src)).join("")
+          + '<button class="add-src" data-act="add">+ Add source</button>'
+          + '</div>'
+          + '</div>';
+      });
+      list.innerHTML = html;
+      stages.forEach((s) => {
+        const el = list.querySelector('.stage[data-id="' + s.id + '"]');
+        el.querySelector('[data-act="status"]').value = state[s.id].status;
+        syncStage(s.id, el);
+      });
+      generate();
+    }
+
+    function attr(v) {
+      return String(v == null ? "" : v)
+        .replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function srcRow(stageId, i, src) {
+      return '<div class="src-row" data-idx="' + i + '">'
+        + '<input type="text" data-act="srcLabel" placeholder="Label" value="' + attr(src.label) + '">'
+        + '<input type="url" data-act="srcUrl" placeholder="https://..." value="' + attr(src.url) + '">'
+        + '<button data-act="del">Remove</button>'
+        + '</div>';
+    }
+
+    function syncStage(stageId, el) {
+      const st = state[stageId];
+      const noteRow = el.querySelector(".note-row");
+      const sources = el.querySelector(".sources");
+      noteRow.style.display = st.status === "progress" ? "block" : "none";
+      sources.style.display = st.status === "done" ? "block" : "none";
+    }
+
+    list.addEventListener("change", (e) => {
+      const stageEl = e.target.closest(".stage");
+      if (!stageEl) return;
+      const stageId = stageEl.dataset.id;
+      const act = e.target.dataset.act;
+      if (act === "status") {
+        state[stageId].status = e.target.value;
+        saveDraft();
+        syncStage(stageId, stageEl);
+        generate();
+      }
+    });
+
+    list.addEventListener("input", (e) => {
+      const stageEl = e.target.closest(".stage");
+      if (!stageEl) return;
+      const stageId = stageEl.dataset.id;
+      const act = e.target.dataset.act;
+      if (act === "note") {
+        state[stageId].note = e.target.value;
+      } else if (act === "srcLabel" || act === "srcUrl") {
+        const row = e.target.closest(".src-row");
+        const idx = Number(row.dataset.idx);
+        if (act === "srcLabel") state[stageId].sources[idx].label = e.target.value;
+        else state[stageId].sources[idx].url = e.target.value;
+      } else {
+        return;
+      }
+      saveDraft();
+      generate();
+    });
+
+    list.addEventListener("click", (e) => {
+      const stageEl = e.target.closest(".stage");
+      if (!stageEl) return;
+      const stageId = stageEl.dataset.id;
+      const act = e.target.dataset.act;
+      if (act === "add") {
+        state[stageId].sources.push({ label: "", url: "" });
+        saveDraft();
+        render();
+      } else if (act === "del") {
+        const idx = Number(e.target.closest(".src-row").dataset.idx);
+        state[stageId].sources.splice(idx, 1);
+        saveDraft();
+        render();
+      }
+    });
+
+    function today() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function generate() {
+      const lines = [];
+      stages.forEach((s) => {
+        const st = state[s.id];
+        if (st.status === "done") {
+          const srcs = st.sources
+            .filter((x) => (x.label && x.label.trim()) || (x.url && x.url.trim()))
+            .map((x) => '        { label: ' + JSON.stringify(x.label || "") + ', url: ' + JSON.stringify(x.url || "") + ' }');
+          if (srcs.length) {
+            lines.push('    "' + s.id + '": { done: true, sources: [');
+            lines.push(srcs.join(",\n"));
+            lines.push('    ] }');
+          } else {
+            lines.push('    "' + s.id + '": { done: true }');
+          }
+        } else if (st.status === "progress" && st.note && st.note.trim()) {
+          lines.push('    "' + s.id + '": { done: false, note: ' + JSON.stringify(st.note) + ' }');
+        }
+      });
+      const body = lines.length ? lines.join(",\n") : "";
+      output.value =
+        "// ROADMAP PROGRESS DATA - generated by x9k-admin-roadmap.html\n"
+        + "// Replaces roadmap-data.js. Edit there or regenerate here.\n\n"
+        + "window.ROADMAP_DATA = {\n"
+        + '  updated: "' + today() + '",\n'
+        + "  stages: {\n"
+        + body + (body ? "\n" : "")
+        + "  }\n"
+        + "};\n";
+    }
+
+    function download() {
+      const blob = new Blob([output.value], { type: "text/javascript" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "roadmap-data.js";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      flash("Downloaded roadmap-data.js");
+    }
+
+    function copy() {
+      const done = () => flash("Copied to clipboard");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(output.value).then(done, () => fallbackCopy());
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function fallbackCopy() {
+      output.removeAttribute("readonly");
+      output.select();
+      try { document.execCommand("copy"); flash("Copied to clipboard"); } catch (e) { flash("Select the text above to copy"); }
+      output.setAttribute("readonly", "readonly");
+    }
+
+    document.getElementById("download").addEventListener("click", download);
+    document.getElementById("copy").addEventListener("click", copy);
+    document.getElementById("clearAll").addEventListener("click", () => {
+      if (!confirm("Set every stage back to 'Not started'?")) return;
+      stages.forEach((s) => { state[s.id] = { status: "todo", note: "", sources: [] }; });
+      saveDraft();
+      render();
+      flash("All statuses cleared");
+    });
+    document.getElementById("resetDraft").addEventListener("click", () => {
+      if (!confirm("Discard local draft and reload from the committed roadmap-data.js?")) return;
+      localStorage.removeItem(DRAFT_KEY);
+      seedFromFile();
+      render();
+      flash("Draft reset");
+    });
+
+    render();
+  </script>
+</body>
+
+</html>
