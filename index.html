@@ -93,9 +93,31 @@
       <!-- Quick Status & Action -->
       <div class="flex items-center gap-3 text-xs font-mono">
 
-        <a class="inline-flex items-center gap-1.5 text-zinc-900 bg-white hover:bg-zinc-200 transition-colors rounded-md px-3 py-1.5 font-medium"
+        <!-- Desktop actions -->
+        <div class="hidden sm:flex items-center gap-3">
+          <a class="inline-flex items-center gap-1.5 text-zinc-900 bg-white hover:bg-zinc-200 transition-colors rounded-md px-3 py-1.5 font-medium"
+            href="roadmap.html">LLM Roadmap</a>
+          <a class="inline-flex items-center text-zinc-400 hover:text-white transition-colors border border-zinc-800 hover:border-zinc-700 rounded-md px-3 py-1.5 bg-zinc-900/60"
+            href="https://ngl.link/ahmednabiled" target="_blank" rel="noopener noreferrer">Ask me</a>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button id="mobileMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"
+          class="sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-md border border-zinc-800 bg-zinc-900/60 text-zinc-300 hover:text-white hover:border-zinc-700 transition-colors">
+          <svg id="mobileMenuIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div id="mobileMenu" class="sm:hidden hidden border-t border-zinc-800/80 bg-[#09090b]/95 backdrop-blur-md">
+      <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col gap-2 text-xs font-mono">
+        <a class="inline-flex items-center gap-1.5 text-zinc-900 bg-white hover:bg-zinc-200 transition-colors rounded-md px-3 py-2 font-medium"
           href="roadmap.html">LLM Roadmap</a>
-        <a class="inline-flex items-center text-zinc-400 hover:text-white transition-colors border border-zinc-800 hover:border-zinc-700 rounded-md px-3 py-1.5 bg-zinc-900/60"
+        <a class="inline-flex items-center text-zinc-400 hover:text-white transition-colors border border-zinc-800 hover:border-zinc-700 rounded-md px-3 py-2 bg-zinc-900/60"
           href="https://ngl.link/ahmednabiled" target="_blank" rel="noopener noreferrer">Ask me</a>
       </div>
     </div>
@@ -261,6 +283,27 @@
         heroVideo.addEventListener('click', () => {
           heroVideo.currentTime = 0;
           heroVideo.play();
+        });
+      }
+
+      const menuBtn = document.getElementById('mobileMenuBtn');
+      const menu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('mobileMenuIcon');
+      if (menuBtn && menu) {
+        const bars = 'M4 6h16M4 12h16M4 18h16';
+        const close = 'M6 6l12 12M18 6L6 18';
+        const setOpen = (open) => {
+          menu.classList.toggle('hidden', !open);
+          menuBtn.setAttribute('aria-expanded', String(open));
+          menuIcon.querySelector('path').setAttribute('d', open ? close : bars);
+        };
+        menuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setOpen(menu.classList.contains('hidden'));
+        });
+        menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target) && !menuBtn.contains(e.target)) setOpen(false);
         });
       }
     });
